@@ -103,7 +103,7 @@ Rules:
       title: valueInput || "Untitled",
       level,
       language,
-      items: result,
+      questions: result,
       createdAt: new Date().toISOString(), 
       questionsCount: result.length, 
     };
@@ -123,7 +123,7 @@ Rules:
         setLanguage={setLanguage}
       />
       <InterviewQuestionList
-        items={result}
+        questions={result}
         handleSaveSession={handleSaveSession}
       />
     </div>

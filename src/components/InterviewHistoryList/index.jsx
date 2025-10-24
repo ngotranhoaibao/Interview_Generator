@@ -1,6 +1,6 @@
 import React from "react";
 
-const InterviewHistoryList = ({ items = [], onDeleteOne }) => {
+const InterviewHistoryList = ({ items = [], onDeleteOne, onSelect }) => {
   if (!items.length) {
     return (
       <div className="text-sm text-muted-foreground text-center">
@@ -27,6 +27,7 @@ const InterviewHistoryList = ({ items = [], onDeleteOne }) => {
           <div
             key={id}
             className="border border-border rounded-lg p-4 bg-card hover:border-primary/50 transition cursor-pointer group"
+            onClick={() => onSelect?.(item)}
           >
             <div className="flex items-start justify-between gap-4">
               <button className="flex-1 text-left hover:opacity-80 transition">

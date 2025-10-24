@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const InterviewQuestionList = ({ items = [], handleSaveSession }) => {
+const InterviewQuestionList = ({ questions = [], handleSaveSession }) => {
   const [open, setOpen] = React.useState(new Set());
   const toggle = (i) =>
     setOpen((prev) => {
@@ -12,12 +12,12 @@ const InterviewQuestionList = ({ items = [], handleSaveSession }) => {
       return next;
     });
 
-  if (!items.length) return null;
+  if (!questions.length) return null;
 
   return (
     <div className="mt-8 space-y-4">
       <div className="space-y-3">
-        {items.map((it, i) => {
+        {questions.map((it, i) => {
           const isOpen = open.has(i);
           return (
             <div
@@ -69,7 +69,7 @@ const InterviewQuestionList = ({ items = [], handleSaveSession }) => {
         >
           Save this session
         </button>
-        <button class="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition">
+        <button className="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:opacity-90 transition">
           Clear
         </button>
       </div>
