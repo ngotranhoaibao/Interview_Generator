@@ -27,7 +27,7 @@ const InterviewQuestionDialog = ({ open, onOpenChange, id, data = [] }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl w-full max-h-[90vh] overflow-y-auto p-0 border-none bg-transparent">
+      <DialogContent className="max-w-2xl! w-full max-h-[90vh] overflow-y-auto p-0 border-none bg-transparent">
         <div className="bg-card border border-border rounded-lg shadow-lg overflow-hidden">
           <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between">
             <div>

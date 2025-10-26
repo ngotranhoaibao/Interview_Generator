@@ -15,28 +15,33 @@ const HomePage = () => {
   const cleanQuestion = (q) =>
     q
       .replace(/^(\*\*)?\s*question\s*:?\s*(\*\*)?/i, "")
-      .replace(/^\d+[\.\)]\s*/, "")
+      .replace(/^\d+[\\.\\)]\s*/, "")
+      .replace(/^\s*#+\s*/, "")
       .replace(/\*\*/g, "")
       .trim();
+
   const parseQuestionsAndAnswers = (text) => {
     if (!text) return [];
-    const blocks = text
-      .split(/\n(?=\d+\.\s)/g)
-      .map((b) => b.trim())
-      .filter(Boolean);
+    const re = /(^\d+\.\s[^\n\r]+)([\s\S]*?)(?=^\d+\.\s|\Z)/gm;
+    const out = [];
+    let m;
+    let i = 0;
 
-    return blocks.map((block, idx) => {
-      const m = block.match(/^\d+\.\s*(.*?)(?:\n|$)/);
-      const questionRaw = m ? m[1] : `Question ${idx + 1}`;
-      const question = cleanQuestion(questionRaw);
-      const answer = block.replace(/^\d+\.\s*.*?\n?/, "").trim();
+    while ((m = re.exec(text)) !== null) {
+      const qLine = m[1] || "";
+      const body = (m[2] || "").trim();
 
-      return {
-        id: Date.now() + idx,
+      const question = cleanQuestion(qLine);
+      const answer = body;
+
+      out.push({
+        id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${i++}`,
         question,
         answer,
-      };
-    });
+      });
+    }
+
+    return out;
   };
 
   const handleCreate = async () => {
@@ -44,7 +49,7 @@ const HomePage = () => {
 
     try {
       setLoading(true);
-      const prompt = `
+       const prompt = `
 You are a professional technical interviewer. Generate **10 Q&A blocks** for the role:
 **${valueInput}** (Level: **${level}**, Language: **${language}**).
 
@@ -71,7 +76,6 @@ Rules:
 - Do NOT wrap questions in **bold**.
 - No extra intro/outro text outside the blocks.
 `;
-
       const apiKey = import.meta.env.VITE_API_KEY;
       if (!apiKey) {
         alert("Thiếu API key (VITE_API_KEY).");
@@ -92,6 +96,7 @@ Rules:
       setLoading(false);
     }
   };
+  const handleClear = () => setResult([]);
 
   const handleSaveSession = () => {
     if (!result.length) {
@@ -104,14 +109,13 @@ Rules:
       level,
       language,
       questions: result,
-      createdAt: new Date().toISOString(), 
-      questionsCount: result.length, 
+      createdAt: new Date().toISOString(),
+      questionsCount: result.length,
     };
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     localStorage.setItem(STORAGE_KEY, JSON.stringify([session, ...stored]));
     alert("Session saved successfully!");
   };
-
   return (
     <div className="max-w-4xl mx-auto">
       <QuestionGeneratorForm
@@ -125,6 +129,7 @@ Rules:
       <InterviewQuestionList
         questions={result}
         handleSaveSession={handleSaveSession}
+        handleClear={handleClear}
       />
     </div>
   );
