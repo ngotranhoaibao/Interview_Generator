@@ -6,7 +6,6 @@ const Header = () => {
     localStorage.getItem("theme") || "light"
   );
 
-  // lấy pathname hiện tại
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -66,7 +65,6 @@ const Header = () => {
               aria-label="Toggle theme"
             >
               {theme === "light" ? (
-                // 🌙 Moon icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -82,7 +80,6 @@ const Header = () => {
                   <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
                 </svg>
               ) : (
-                // ☀️ Sun icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
